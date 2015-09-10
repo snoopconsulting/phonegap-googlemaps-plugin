@@ -68,6 +68,7 @@
         <source-file src="src/android/plugin/google/maps/PluginTileProvider.java" target-dir="src/plugin/google/maps" />
         <source-file src="src/android/plugin/google/maps/PluginUtil.java" target-dir="src/plugin/google/maps" />
         <source-file src="src/android/plugin/google/maps/PluginAsyncInterface.java" target-dir="src/plugin/google/maps" />
+        <source-file src="src/android/plugin/google/maps/GeoJSONTileProvider.java" target-dir="src/plugin/google/maps" />
         
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data
@@ -156,6 +157,11 @@
         <source-file src="src/ios/GoogleMaps/MyPluginLayerDebugView.m" />
         <header-file src="src/ios/GoogleMaps/MyPluginScrollView.h" />
         <source-file src="src/ios/GoogleMaps/MyPluginScrollView.m" />
+
+        <source-file src="src/ios/GoogleMaps/GeoJSONTileProvider.m" />
+        <header-file src="src/ios/GoogleMaps/GeoJSONTileProvider.h" />
+
+
 
         <config-file target="*-Info.plist" parent="Google Maps API Key">
             <string>$API_KEY_FOR_IOS</string>
