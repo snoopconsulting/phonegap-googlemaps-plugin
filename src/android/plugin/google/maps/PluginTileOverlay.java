@@ -12,43 +12,70 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
   /**
    * Create tile overlay
-   * 
+   *
    * @param args
    * @param callbackContext
    * @throws JSONException
    */
   @SuppressWarnings("unused")
   private void createTileOverlay(final JSONArray args,
-    final CallbackContext callbackContext) throws JSONException {
+                                 final CallbackContext callbackContext) throws JSONException {
 
     JSONObject opts = args.getJSONObject(1);
-    int tileSize = opts.getInt("tileSize");
-    final String tileUrlFormat = opts.getString("tileUrlFormat");
-    
-    double opacity = 1.0;
-    if (opts.has("opacity")) {
-      opacity = opts.getDouble("opacity");
-    }
-    PluginTileProvider tileProvider = new PluginTileProvider(tileUrlFormat, opacity, tileSize);
 
-    TileOverlayOptions options = new TileOverlayOptions();
-    options.tileProvider(tileProvider);
-    if (opts.has("zIndex")) {
-      options.zIndex((float)opts.getDouble("zIndex"));
-    }
-    if (opts.has("visible")) {
-      options.visible(opts.getBoolean("visible"));
-    }
-    TileOverlay tileOverlay = this.map.addTileOverlay(options);
-    String id = "tile_" + tileOverlay.getId();
+    boolean geoJson = opts.has("geoJSONTile") && opts.getBoolean("geoJSONTile") ;
+    if ( geoJson ) {
+      System.out.println("Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
+      GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.cordova);
+      TileOverlayOptions options = new TileOverlayOptions();
+      options.tileProvider(tileProvider);
+      if (opts.has("zIndex")) {
+        options.zIndex((float)opts.getDouble("zIndex"));
+      }
+      if (opts.has("visible")) {
+        options.visible(opts.getBoolean("visible"));
+      }
+      options.tileProvider(tileProvider);
+      TileOverlay tileOverlay = this.map.addTileOverlay(options);
+      String id = "tile_" + tileOverlay.getId();
 
-    this.objects.put("tileProvider_" + id, tileProvider);
-    
+      this.objects.put("tileProvider_" + id, tileProvider);
 
-    JSONObject result = new JSONObject();
-    result.put("hashCode", tileOverlay.hashCode());
-    result.put("id", id);
-    callbackContext.success(result);
+      JSONObject result = new JSONObject();
+      result.put("hashCode", tileOverlay.hashCode());
+      result.put("id", id);
+      callbackContext.success(result);
+
+    } else {
+      int tileSize = opts.getInt("tileSize");
+      final String tileUrlFormat = opts.getString("tileUrlFormat");
+
+      double opacity = 1.0;
+      if (opts.has("opacity")) {
+        opacity = opts.getDouble("opacity");
+      }
+      PluginTileProvider tileProvider = new PluginTileProvider(tileUrlFormat, opacity, tileSize);
+
+      TileOverlayOptions options = new TileOverlayOptions();
+      options.tileProvider(tileProvider);
+      if (opts.has("zIndex")) {
+        options.zIndex((float)opts.getDouble("zIndex"));
+      }
+      if (opts.has("visible")) {
+        options.visible(opts.getBoolean("visible"));
+      }
+      TileOverlay tileOverlay = this.map.addTileOverlay(options);
+      String id = "tile_" + tileOverlay.getId();
+
+      this.objects.put("tileProvider_" + id, tileProvider);
+      this.objects.put("tileOverlay_" + id, tileOverlay);
+      
+      JSONObject result = new JSONObject();
+      result.put("hashCode", tileOverlay.hashCode());
+      result.put("id", id);
+      callbackContext.success(result);
+    }
+
   }
 
   /**
@@ -68,18 +95,20 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
    * Set visibility for the object
    * @param args
    * @param callbackContext
-   * @throws JSONException 
+   * @throws JSONException
    */
   protected void setVisible(JSONArray args, CallbackContext callbackContext) throws JSONException {
     boolean visible = args.getBoolean(2);
     String id = args.getString(1);
-    this.setBoolean("setVisible", id, visible, callbackContext);
+    TileOverlay tileOverlay = (TileOverlay)this.objects.get("tileOverlay_" +id);
+    tileOverlay.setVisible(visible);
+   // this.setBoolean("setVisible", id, visible, callbackContext);
   }
   /**
    * Remove this tile layer
    * @param args
    * @param callbackContext
-   * @throws JSONException 
+   * @throws JSONException
    */
   protected void remove(JSONArray args, CallbackContext callbackContext) throws JSONException {
     String id = args.getString(1);
@@ -90,7 +119,7 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
     }
     tileOverlay.remove();
     tileOverlay.clearTileCache();
-    
+
     id = id.replace("tile_", "tileProvider_");
     this.objects.put(id, null);
     this.objects.remove(id);
@@ -100,7 +129,7 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
    * Clear cache
    * @param args
    * @param callbackContext
-   * @throws JSONException 
+   * @throws JSONException
    */
   protected void clearTileCache(JSONArray args, CallbackContext callbackContext) throws JSONException {
     String id = args.getString(1);
@@ -113,7 +142,7 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
    * Set fadeIn for the object
    * @param args
    * @param callbackContext
-   * @throws JSONException 
+   * @throws JSONException
    */
   protected void setFadeIn(JSONArray args, CallbackContext callbackContext) throws JSONException {
     boolean visible = args.getBoolean(2);
@@ -124,13 +153,13 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
    * Set opacity for the tile layer
    * @param args
    * @param callbackContext
-   * @throws JSONException 
+   * @throws JSONException
    */
   protected void setOpacity(JSONArray args, CallbackContext callbackContext) throws JSONException {
     double opacity = args.getDouble(2);
     String id = args.getString(1);
     id = id.replace("tile_", "tileProvider_");
-    
+
     PluginTileProvider tileProvider = (PluginTileProvider)this.objects.get(id);
     tileProvider.setOpacity(opacity);
   }
