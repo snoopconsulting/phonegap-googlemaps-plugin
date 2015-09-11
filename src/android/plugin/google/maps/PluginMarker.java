@@ -41,6 +41,12 @@ public class PluginMarker extends MyPlugin {
   
   /**
    * Create a marker
+   *
+   * Se llama de js con Marker.createMarker
+   * Ver en GoogleMaps, método loadPlugin, que levanta las clases Plugin* via reflection, así
+   * que la expresión en js Marker.createMarker
+   * se traduce a ejecutar el método createMarker de PluginMarker
+   *
    * @param args
    * @param callbackContext
    * @throws JSONException 

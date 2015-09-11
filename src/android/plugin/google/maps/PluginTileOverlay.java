@@ -1,5 +1,7 @@
 package plugin.google.maps;
 
+import android.util.Log;
+
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,6 +9,8 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+
+import ar.com.cablevisionfibertel.fzmaps.HotspotCluster;
 
 public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
@@ -25,7 +29,7 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
     boolean geoJson = opts.has("geoJSONTile") && opts.getBoolean("geoJSONTile") ;
     if ( geoJson ) {
-      System.out.println("Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
+      Log.d("FZMap","Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
       GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.cordova);
       TileOverlayOptions options = new TileOverlayOptions();
       options.tileProvider(tileProvider);
