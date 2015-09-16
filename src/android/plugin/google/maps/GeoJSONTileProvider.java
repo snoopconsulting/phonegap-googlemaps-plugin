@@ -39,6 +39,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
+ * Cuando Google Maps avisa que el usuario está viendo un tile, invoca a
+ * jsFunctionName(z,x,y)
+ *
+ * FIXME : Sacar lo de GeoJSON del nombre, es genérica
+ *
  * Created by ramiro on 21/7/15.
  */
 public class GeoJSONTileProvider implements TileProvider {
@@ -47,11 +52,13 @@ public class GeoJSONTileProvider implements TileProvider {
 
     private CordovaWebView webView;
     private CordovaInterface cordova;
+    private String jsFunctionName;
 
 
-    public GeoJSONTileProvider(CordovaWebView webView, CordovaInterface cordova) {
+    public GeoJSONTileProvider(CordovaWebView webView, CordovaInterface cordova, String jsFunctionName) {
         this.webView = webView;
         this.cordova = cordova;
+        this.jsFunctionName = jsFunctionName;
     }
 
     @Override
@@ -61,8 +68,7 @@ public class GeoJSONTileProvider implements TileProvider {
             //Notifico a JS que me pidieron un tile
             cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
-                String call = "javascript:window.MapTileRequestedHandler(" + zoom + "," + x + "," + y + ")";
-//              Log.d(LOG_TAG,"calling webview " + webView + " call: " + call);
+                String call = "javascript:" + jsFunctionName + "(" + zoom + "," + x + "," + y + ")";
                 webView.loadUrl(call);
                 }
             });

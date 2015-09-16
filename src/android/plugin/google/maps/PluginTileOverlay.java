@@ -30,8 +30,15 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
     boolean geoJson = opts.has("geoJSONTile") && opts.getBoolean("geoJSONTile") ;
     if ( geoJson ) {
       Log.d("FZMap","Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
-      GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.cordova);
+
+      String jsFunctionName = "window.GenericMapTileRequestedHandler";
+      if ( opts.has("callbackFunction") ) {
+        jsFunctionName = opts.getString("callbackFunction");
+      }
+
+      GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.cordova, jsFunctionName);
       TileOverlayOptions options = new TileOverlayOptions();
+      // FIXME Estas opciones no sé si hay que mandarlas o no realmente para un callback
       options.tileProvider(tileProvider);
       if (opts.has("zIndex")) {
         options.zIndex((float)opts.getDouble("zIndex"));
