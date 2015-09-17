@@ -673,9 +673,11 @@ public class PluginMarker extends MyPlugin {
       iconUrl = "./" + iconUrl;
     }
     if (iconUrl.indexOf("./") == 0) {
-      String currentPage = this.webView.getUrl();
-      currentPage = currentPage.replaceAll("[^\\/]*$", "");
-      iconUrl = iconUrl.replace("./", currentPage);
+      if ( this.webView != null ) {
+        String currentPage = this.webView.getUrl();
+        currentPage = currentPage.replaceAll("[^\\/]*$", "");
+        iconUrl = iconUrl.replace("./", currentPage);
+      }
     }
     
     if (iconUrl == null) {
