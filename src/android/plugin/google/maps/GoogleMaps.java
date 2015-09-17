@@ -252,11 +252,11 @@ public class GoogleMaps extends CordovaPlugin implements View.OnClickListener, O
           try {
             String classMethod = args.getString(0);
 
-            if ("Map.animateCamera".equals(classMethod)) {
-              // this is a temporary hack
-              HotspotCluster hsc = new HotspotCluster(activity,map);
-              hsc.loadCluster();
-            }
+//            if ("Map.animateCamera".equals(classMethod)) {
+//              // this is a temporary hack - para probar clustering nativo
+//              HotspotCluster hsc = new HotspotCluster(activity,map);
+//              hsc.loadCluster();
+//            }
 
             String[] params = classMethod.split("\\.", 0);
             
