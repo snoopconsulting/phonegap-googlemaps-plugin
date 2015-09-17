@@ -17,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ar.com.cablevisionfibertel.fzmaps.HotspotCluster;
 import plugin.http.request.HttpRequest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -251,12 +250,6 @@ public class GoogleMaps extends CordovaPlugin implements View.OnClickListener, O
 
           try {
             String classMethod = args.getString(0);
-
-//            if ("Map.animateCamera".equals(classMethod)) {
-//              // this is a temporary hack - para probar clustering nativo
-//              HotspotCluster hsc = new HotspotCluster(activity,map);
-//              hsc.loadCluster();
-//            }
 
             String[] params = classMethod.split("\\.", 0);
             

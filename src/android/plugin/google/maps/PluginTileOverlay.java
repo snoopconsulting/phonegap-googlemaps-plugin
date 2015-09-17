@@ -10,8 +10,6 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-import ar.com.cablevisionfibertel.fzmaps.HotspotCluster;
-
 public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
   /**
