@@ -56,7 +56,13 @@ public class GeoJSONTileProvider implements TileProvider {
 
 
     public GeoJSONTileProvider(CordovaWebView webView, CordovaInterface cordova, String jsFunctionName) {
+        if ( webView == null ) {
+            Log.e(LOG_TAG,"webView es null");
+        }
         this.webView = webView;
+        if ( cordova == null ) {
+            Log.e(LOG_TAG,"cordova es null");
+        }
         this.cordova = cordova;
         this.jsFunctionName = jsFunctionName;
     }
@@ -64,15 +70,15 @@ public class GeoJSONTileProvider implements TileProvider {
     @Override
     public Tile getTile(final int x, final int y, final int zoom) {
 
-        if (zoom >= 12 ) {
-            //Notifico a JS que me pidieron un tile
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                public void run() {
+        Log.d(LOG_TAG,"Tile requested:(" + zoom + "," + x + "," + y + ")");
+        //Notifico a JS que me pidieron un tile
+        this.cordova.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
                 String call = "javascript:" + jsFunctionName + "(" + zoom + "," + x + "," + y + ")";
+                Log.i(LOG_TAG,"calling: " + call);
                 webView.loadUrl(call);
-                }
-            });
-        }
+            }
+        });
         return null;
     }
 

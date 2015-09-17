@@ -12,6 +12,8 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
+  private static String LOG_TAG = "PluginTileOverlay";
+
   /**
    * Create tile overlay
    *
@@ -27,14 +29,15 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
 
     boolean geoJson = opts.has("geoJSONTile") && opts.getBoolean("geoJSONTile") ;
     if ( geoJson ) {
-      Log.d("FZMap","Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
+
+      Log.i(LOG_TAG,"Creating GeoJSONTileProvider with webView: " + this.mapCtrl.webView + " mapCtrl: " + this.mapCtrl + " cordova: " + this.mapCtrl.cordova);
 
       String jsFunctionName = "window.GenericMapTileRequestedHandler";
       if ( opts.has("callbackFunction") ) {
         jsFunctionName = opts.getString("callbackFunction");
       }
 
-      GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.cordova, jsFunctionName);
+      GeoJSONTileProvider tileProvider = new GeoJSONTileProvider(this.mapCtrl.webView, this.mapCtrl.cordova, jsFunctionName);
       TileOverlayOptions options = new TileOverlayOptions();
       // FIXME Estas opciones no sé si hay que mandarlas o no realmente para un callback
       options.tileProvider(tileProvider);
@@ -44,7 +47,6 @@ public class PluginTileOverlay extends MyPlugin implements MyPluginInterface {
       if (opts.has("visible")) {
         options.visible(opts.getBoolean("visible"));
       }
-      options.tileProvider(tileProvider);
       TileOverlay tileOverlay = this.map.addTileOverlay(options);
       String id = "tile_" + tileOverlay.getId();
 
