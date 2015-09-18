@@ -27,7 +27,6 @@
                       y:(NSUInteger)y
                    zoom:(NSUInteger)zoom
                receiver:(id<GMSTileReceiver>)receiver {
-    if ( zoom >= 12 ) {
 //        NSLog(@"tileRequested %lu %lu %lu", (unsigned long)x, (unsigned long)y, (unsigned long)zoom);
 
 /* Al webView lo tengo que llamar en el main thread. Aunque parece lógico ejecutarlo en background con algo como:
@@ -37,14 +36,13 @@
  1   0x191f46a74 WebThreadLock
  */
         dispatch_sync(dispatch_get_main_queue(), ^{
-            NSString* call = [NSString stringWithFormat:@"window.MapTileRequestedHandler(%lu,%lu,%lu);", (unsigned long)zoom,(unsigned long)x,(unsigned long)y];
-//            NSLog(@"calling %@", call);
+            NSString* call = [NSString stringWithFormat:@"window.ClusterMapTileRequestedHandler(%lu,%lu,%lu);", (unsigned long)zoom,(unsigned long)x,(unsigned long)y];
             NSString *returnvalue = [self.webView stringByEvaluatingJavaScriptFromString: call];
-//            NSLog(@"returnvalue %@", returnvalue);
      });
 //        }];
-        
-    };
+    
+    // Mando nil para que cuando vuelva a pasar por acá avise de nuevo
+    // Si en vez de nil mando kGMSTileLayerNoTile , **creo** que no volvería a avisar
     [receiver receiveTileWithX: x y: y zoom: zoom image: nil];
 
 }
