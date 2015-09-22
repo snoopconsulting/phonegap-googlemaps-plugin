@@ -3,7 +3,9 @@ package plugin.google.maps;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaResourceApi;
@@ -33,7 +35,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class PluginMarker extends MyPlugin {
-  
+
+  private static Map<String,Bitmap> iconCache = new HashMap<String, Bitmap>();
+
   private enum Animation {
     DROP,
     BOUNCE
@@ -695,14 +699,41 @@ public class PluginMarker extends MyPlugin {
           String iconUrl = iconProperty.getString("url");
           
           Bitmap image = null;
+          boolean fromCache = false;
+
           if (iconUrl.indexOf("cdvfile://") == 0) {
             CordovaResourceApi resourceApi = webView.getResourceApi();
             iconUrl = PluginUtil.getAbsolutePathFromCDVFilePath(resourceApi, iconUrl);
           }
-          
+
+          //Ejemplo: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC
           if (iconUrl.indexOf("data:image/") == 0 && iconUrl.indexOf(";base64,") > -1) {
-            String[] tmp = iconUrl.split(",");
-            image = PluginUtil.getBitmapFromBase64encodedImage(tmp[1]);
+            String idPrefix = "{name:";
+            if ( iconUrl.indexOf(idPrefix) > -1 ) {
+              // incluye al final un id como: {name:' + iconName + '}'
+              String keyJSON = iconUrl.substring(iconUrl.indexOf(idPrefix));
+              try {
+                String iconName = new JSONObject(keyJSON).getString("name");
+                if ( iconCache.containsKey(iconName)) {
+                  image = iconCache.get(iconName);
+                  fromCache = true;
+                } else {
+                  String origUri = iconUrl.substring(0, iconUrl.indexOf(idPrefix));
+                  String[] rawData = origUri.split(",");
+                  image = PluginUtil.getBitmapFromBase64encodedImage(rawData[1]);
+                  image = PluginUtil.scaleBitmapForDevice(image);
+                  iconCache.put(iconName,image);
+                  fromCache = true;
+                }
+              } catch (JSONException e) {
+                Log.e("PluginMarker","Error al crear un icono",e);
+              }
+
+            } else {
+              String[] tmp = iconUrl.split(",");
+              image = PluginUtil.getBitmapFromBase64encodedImage(tmp[1]);
+            }
+
           } else if (iconUrl.indexOf("file://") == 0 &&
               iconUrl.indexOf("file:///android_asset/") == -1) {
             iconUrl = iconUrl.replace("file://", "");
@@ -755,7 +786,7 @@ public class PluginMarker extends MyPlugin {
             }
           }
 
-          if (isResized == false) {
+          if (isResized == false && !fromCache) {
             image = PluginUtil.scaleBitmapForDevice(image);
           }
           return image;
