@@ -8,9 +8,13 @@
 
 #import "Marker.h"
 @implementation Marker
+
+NSMutableDictionary *iconCache = nil;
+
 -(void)setGoogleMapsViewController:(GoogleMapsViewController *)viewCtrl
 {
   self.mapCtrl = viewCtrl;
+  iconCache = [[NSMutableDictionary alloc] init];
 }
 
 /**
@@ -614,39 +618,89 @@
       Boolean isTextMode = true;
           
       UIImage *image;
+      //Ejemplo: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC{name:icon10}
+
       if ([iconPath rangeOfString:@"data:image/"].location != NSNotFound &&
           [iconPath rangeOfString:@";base64,"].location != NSNotFound) {
-        
-        /**
-         * Base64 icon
-         */
-        isTextMode = false;
-        NSArray *tmp = [iconPath componentsSeparatedByString:@","];
-        
-        NSData *decodedData;
-        #if !defined(__IPHONE_8_0)
-          if ([PluginUtil isIOS7_OR_OVER]) {
-            decodedData = [NSData dataFromBase64String:tmp[1]];
+          
+          NSString *idPrefix = @"{name:";
+          if ( [iconPath rangeOfString: idPrefix].location != NSNotFound ) {
+              // incluye al final un id como: {name:' + iconName + '}'
+              
+              NSRange prefixRange = [iconPath rangeOfString:idPrefix];
+              NSRange closeBracketRange = [iconPath rangeOfString:@"}"];
+              NSRange iconNameRange = NSMakeRange(prefixRange.location + idPrefix.length, closeBracketRange.location - prefixRange.location - idPrefix.length);
+              NSString *iconName = [iconPath substringWithRange: iconNameRange ];
+              if ( [iconCache objectForKey: iconName] ) {
+                  image = [iconCache objectForKey: iconName];
+              } else {
+                  //Le saco el JSON del final
+                  iconPath = [ iconPath substringToIndex: prefixRange.location];
+                  /**
+                   * Base64 icon
+                   */
+                  isTextMode = false;
+                  NSArray *tmp = [iconPath componentsSeparatedByString:@","];
+                  
+                  NSData *decodedData;
+#if !defined(__IPHONE_8_0)
+                  if ([PluginUtil isIOS7_OR_OVER]) {
+                      decodedData = [NSData dataFromBase64String:tmp[1]];
+                  } else {
+#if !defined(__IPHONE_7_0)
+                      decodedData = [[NSData alloc] initWithBase64Encoding:(NSString *)tmp[1]];
+#endif
+                  }
+#else
+                  decodedData = [NSData dataFromBase64String:tmp[1]];
+#endif
+                  image = [[UIImage alloc] initWithData:decodedData];
+                  if (width && height) {
+                      image = [image resize:width height:height];
+                  }
+                  
+                  // The `anchor` property for the icon
+                  if ([iconProperty valueForKey:@"anchor"]) {
+                      NSArray *points = [iconProperty valueForKey:@"anchor"];
+                      anchorX = [[points objectAtIndex:0] floatValue] / image.size.width;
+                      anchorY = [[points objectAtIndex:1] floatValue] / image.size.height;
+                      marker.groundAnchor = CGPointMake(anchorX, anchorY);
+                  }
+                  [ iconCache setObject: image forKey: iconName];
+              }
+              
           } else {
-            #if !defined(__IPHONE_7_0)
-              decodedData = [[NSData alloc] initWithBase64Encoding:(NSString *)tmp[1]];
-            #endif
+              /**
+               * Base64 icon
+               */
+              isTextMode = false;
+              NSArray *tmp = [iconPath componentsSeparatedByString:@","];
+              
+              NSData *decodedData;
+#if !defined(__IPHONE_8_0)
+              if ([PluginUtil isIOS7_OR_OVER]) {
+                  decodedData = [NSData dataFromBase64String:tmp[1]];
+              } else {
+#if !defined(__IPHONE_7_0)
+                  decodedData = [[NSData alloc] initWithBase64Encoding:(NSString *)tmp[1]];
+#endif
+              }
+#else
+              decodedData = [NSData dataFromBase64String:tmp[1]];
+#endif
+              image = [[UIImage alloc] initWithData:decodedData];
+              if (width && height) {
+                  image = [image resize:width height:height];
+              }
+              
+              // The `anchor` property for the icon
+              if ([iconProperty valueForKey:@"anchor"]) {
+                  NSArray *points = [iconProperty valueForKey:@"anchor"];
+                  anchorX = [[points objectAtIndex:0] floatValue] / image.size.width;
+                  anchorY = [[points objectAtIndex:1] floatValue] / image.size.height;
+                  marker.groundAnchor = CGPointMake(anchorX, anchorY);
+              }
           }
-        #else
-          decodedData = [NSData dataFromBase64String:tmp[1]];
-        #endif
-        image = [[UIImage alloc] initWithData:decodedData];
-        if (width && height) {
-          image = [image resize:width height:height];
-        }
-        
-        // The `anchor` property for the icon
-        if ([iconProperty valueForKey:@"anchor"]) {
-          NSArray *points = [iconProperty valueForKey:@"anchor"];
-          anchorX = [[points objectAtIndex:0] floatValue] / image.size.width;
-          anchorY = [[points objectAtIndex:1] floatValue] / image.size.height;
-          marker.groundAnchor = CGPointMake(anchorX, anchorY);
-        }
       
       } else {
         /**
