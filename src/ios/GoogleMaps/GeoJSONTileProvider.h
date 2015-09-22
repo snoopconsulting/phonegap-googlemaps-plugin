@@ -9,7 +9,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <Cordova/CDV.h>
 
-@interface GeoJSONTileProvider : GMSTileLayer
+@interface GeoJSONTileProvider : GMSSyncTileLayer //GMSTileLayer
 
 @property (nonatomic, weak) UIWebView* webView;
 @property (nonatomic, weak) id <CDVCommandDelegate> commandDelegate;

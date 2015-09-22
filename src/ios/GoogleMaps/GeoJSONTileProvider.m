@@ -38,12 +38,12 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSString* call = [NSString stringWithFormat:@"window.ClusterMapTileRequestedHandler(%lu,%lu,%lu);", (unsigned long)zoom,(unsigned long)x,(unsigned long)y];
             NSString *returnvalue = [self.webView stringByEvaluatingJavaScriptFromString: call];
+            // Mando nil para que cuando vuelva a pasar por acá avise de nuevo
+            // Si en vez de nil mando kGMSTileLayerNoTile , **creo** que no volvería a avisar
+            [receiver receiveTileWithX: x y: y zoom: zoom image: nil];
      });
 //        }];
     
-    // Mando nil para que cuando vuelva a pasar por acá avise de nuevo
-    // Si en vez de nil mando kGMSTileLayerNoTile , **creo** que no volvería a avisar
-    [receiver receiveTileWithX: x y: y zoom: zoom image: nil];
 
 }
 
