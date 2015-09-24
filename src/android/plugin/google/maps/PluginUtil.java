@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.IndoorLevel;
@@ -215,6 +216,7 @@ public class PluginUtil {
     try {
       image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
     } catch (Exception e) {
+      Log.e("PluginUtil", "Exception en getBitmapFromBase64encodedImage, base64EncodedImage : " + base64EncodedImage, e);
       e.printStackTrace();
     }
     return image;
