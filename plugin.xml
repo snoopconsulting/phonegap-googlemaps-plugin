@@ -17,9 +17,9 @@
     <engines>
       <engine name="cordova" version=">=3.5.0" />
     </engines>
-    
+    <!--
     <dependency id="plugin.http.request" />
-    
+    -->
     <!-- android -->
     <platform name="android">
         <preference name="API_KEY_FOR_ANDROID" />
