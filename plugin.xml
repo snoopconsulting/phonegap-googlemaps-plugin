@@ -18,7 +18,9 @@
       <engine name="cordova" version=">=3.5.0" />
     </engines>
 
-    <dependency id="plugin.http.request" />
+    <!-- Cableo el URL xq no existe más este plugin en el registry. OJO que en versiones más modernas lo sacaron directamente -->
+    <!-- VER https://github.com/mapsplugin/cordova-plugin-googlemaps/commit/5a3ca39baaf6eef48bcf0c48c2eb3936617b6f0d -->
+    <dependency id="plugin.http.request" url="https://github.com/wf9a5m75/phonegap-http-request" />
 
     <!-- android -->
     <platform name="android">
