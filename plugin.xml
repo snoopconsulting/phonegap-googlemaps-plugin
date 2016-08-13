@@ -47,6 +47,25 @@
         </config-file>
 
         <!--
+        Comentado porque el cambio de repos de plugins rompió este.
+        Si se carga así da un error como:
+        
+Failed to install 'cordova-plugin-google-analytics':Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
+    at checkID (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/fetch.js:181:15)
+    at /usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/fetch.js:166:9
+    at _fulfilled (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:787:54)
+    at self.promiseDispatch.done (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:816:30)
+    at Promise.promise.promiseDispatch (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/node_modules/cordova-common/node_modules/q/q.js:796:13)
+    at /usr/local/lib/node_modules/cordova/node_modules/cordova-lib/node_modules/cordova-common/node_modules/q/q.js:604:44
+    at runSingle (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/node_modules/cordova-common/node_modules/q/q.js:137:13)
+    at flush (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/node_modules/cordova-common/node_modules/q/q.js:125:13)
+    at nextTickCallbackWith0Args (node.js:420:9)
+    at process._tickCallback (node.js:349:13)
+Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
+
+        La dependency esta es un fork de https://github.com/MobileChromeApps/google-play-services
+        este dice que en realidad tengo que usar el tag framework.
+
         <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
         -->
         <framework src="com.google.android.gms:play-services:+" /> 
