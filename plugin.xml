@@ -49,8 +49,15 @@
         <!--
         Comentado porque el cambio de repos de plugins rompió este.
         Si se carga así da un error como:
-        
-Failed to install 'cordova-plugin-google-analytics':Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
+$  cordova plugin add https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git --variable API_KEY_FOR_ANDROID="AIzaSyDkFCGF2hU7PodsI799pp5FrV1sM9tH57E" --variable API_KEY_FOR_IOS="AIzaSyCTY9xmyTBLv-TGg5q4hEZZnZDwyUuvBC8"
+Fetching plugin "https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git" via git clone
+Repository "https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git" checked out to git ref "master".
+Installing "fz-google-maps-plugin" for android
+Dependent plugin "plugin.http.request" already installed on android.
+Notice: com.google.playservices has been automatically converted to cordova-plugin-googleplayservices and fetched from npm. This is due to our old plugins registry shutting down.
+Fetching plugin "https://github.com/wf9a5m75/google-play-services" via git clone
+Repository "https://github.com/wf9a5m75/google-play-services" checked out to git ref "v23".
+Failed to install 'fz-google-maps-plugin':Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
     at checkID (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/fetch.js:181:15)
     at /usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/fetch.js:166:9
     at _fulfilled (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:787:54)
@@ -63,15 +70,14 @@ Failed to install 'cordova-plugin-google-analytics':Error: Expected plugin to ha
     at process._tickCallback (node.js:349:13)
 Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
 
+
         La dependency esta es un fork de https://github.com/MobileChromeApps/google-play-services
         este dice que en realidad tengo que usar el tag framework.
         
-        ROLLBACK
-        Lo había cambiado por esto, pero como agrega cualquier versón, está cargando otra que rompe todo
-        <framework src="com.google.android.gms:play-services:+" /> 
+        <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
         -->
 
-        <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
+        <framework src="com.google.android.gms:play-services:8.3.0" /> 
 
         <!-- plugin src files -->
         <source-file src="src/android/plugin/google/maps/AsyncLicenseInfo.java" target-dir="src/plugin/google/maps" />
