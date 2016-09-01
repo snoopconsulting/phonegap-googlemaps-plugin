@@ -65,10 +65,13 @@ Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "c
 
         La dependency esta es un fork de https://github.com/MobileChromeApps/google-play-services
         este dice que en realidad tengo que usar el tag framework.
+        
+        ROLLBACK
+        Lo había cambiado por esto, pero como agrega cualquier versón, está cargando otra que rompe todo
+        <framework src="com.google.android.gms:play-services:+" /> 
+        -->
 
         <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
-        -->
-        <framework src="com.google.android.gms:play-services:+" /> 
 
         <!-- plugin src files -->
         <source-file src="src/android/plugin/google/maps/AsyncLicenseInfo.java" target-dir="src/plugin/google/maps" />
