@@ -47,9 +47,9 @@
         </config-file>
 
         <!--
-        Comentado porque el cambio de repos de plugins rompió este.
-        Si se carga así da un error como:
-$  cordova plugin add https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git --variable API_KEY_FOR_ANDROID="AIzaSyDkFCGF2hU7PodsI799pp5FrV1sM9tH57E" --variable API_KEY_FOR_IOS="AIzaSyCTY9xmyTBLv-TGg5q4hEZZnZDwyUuvBC8"
+        Comentado porque el cambio de repos de plugins rompió este. Si se carga así da un error como:
+$  cordova plugin add https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git plin plin plin
+
 Fetching plugin "https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git" via git clone
 Repository "https://github.com/snoopconsulting/phonegap-googlemaps-plugin.git" checked out to git ref "master".
 Installing "fz-google-maps-plugin" for android
