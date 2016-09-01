@@ -76,6 +76,11 @@ Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "c
         
         <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
 
+        OJO OJO
+        que tira
+        Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "com.google.playservices".
+        el id es este "nuevo"
+        
         Esto lo necesitamos cuando usamos cordova android 5+ ( sdk 23 ), para el 4.1.1 ( sdk 22 ) va bien con el dependency de arriba
         Así que cuando migramos a cordova android 5, revisar lo que cambió upstream del plugin y seguro hay que poner estas deps como framework
         <framework src="com.google.android.gms:play-services:5+" /> 
@@ -84,7 +89,7 @@ Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "c
         <framework src="com.google.android.gms:play-services-maps:8.3.0" /> 
         <framework src="com.google.android.gms:play-services-location:8.3.0" /> 
         -->
-        <dependency id="com.google.playservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
+        <dependency id="cordova-plugin-googleplayservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
 
 
         <!-- plugin src files -->
