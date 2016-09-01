@@ -89,7 +89,7 @@ Error: Expected plugin to have ID "cordova-plugin-googleplayservices" but got "c
         <framework src="com.google.android.gms:play-services-maps:8.3.0" /> 
         <framework src="com.google.android.gms:play-services-location:8.3.0" /> 
         -->
-        <dependency id="cordova-plugin-googleplayservices" url="https://github.com/wf9a5m75/google-play-services#v23" />
+        <dependency id="cordova-plugin-googleplayservices" url="https://github.com/snoopconsulting/google-play-services#v23" />
 
 
         <!-- plugin src files -->
