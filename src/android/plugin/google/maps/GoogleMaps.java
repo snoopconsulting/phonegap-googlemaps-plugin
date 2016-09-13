@@ -1821,6 +1821,9 @@ public class GoogleMaps extends CordovaPlugin implements View.OnClickListener, O
     
     if (title != null) {
       if (title.indexOf("data:image/") > -1 && title.indexOf(";base64,") > -1) {
+        // Sin borde, el infowindow de fzones no lleva padding
+        windowLayer.setPadding(0, 0, 0, 0);
+            
         String[] tmp = title.split(",");
         Bitmap image = PluginUtil.getBitmapFromBase64encodedImage(tmp[1]);
         image = PluginUtil.scaleBitmapForDevice(image);
