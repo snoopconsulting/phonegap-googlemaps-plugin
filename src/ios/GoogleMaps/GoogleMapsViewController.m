@@ -340,6 +340,7 @@ NSDictionary *initOptions;
 }
 
 //future support: custom info window
+// Modificado para que si recibe una imagen, no dibuje el borde blanco
 -(UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker*)marker
 {
   CGSize rectSize;
@@ -395,7 +396,36 @@ NSDictionary *initOptions;
     #endif
     
     base64Image = [[UIImage alloc] initWithData:decodedData];
-    rectSize = CGSizeMake(base64Image.size.width + leftImg.size.width, base64Image.size.height + leftImg.size.height / 2);
+    // Solamente el tamaño del infowindow image que recibo
+    rectSize = CGSizeMake(base64Image.size.width, base64Image.size.height);
+    
+    // armo la UIImage y la retorno
+    UIGraphicsBeginImageContextWithOptions(rectSize, NO, 0.0f);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetAllowsAntialiasing(context, true);
+      //Esto es para rellenarlo de blanco
+//    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+      
+    //Draw the content image
+    CGRect imageRect = CGRectMake(0, 0, base64Image.size.width, base64Image.size.height);
+    CGContextTranslateCTM(context, 0, base64Image.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextDrawImage(context, imageRect, base64Image.CGImage);
+    
+    //-------------------------------------
+    // Generate new image
+    //-------------------------------------
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rectSize.width, rectSize.height)];
+    [imageView setContentMode:UIViewContentModeScaleAspectFill];
+    [imageView setImage:image];
+    return imageView;
+    
+      
+      
     
   } else {
   
