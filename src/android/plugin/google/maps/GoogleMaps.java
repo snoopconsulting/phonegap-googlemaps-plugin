@@ -1890,9 +1890,12 @@ public class GoogleMaps extends CordovaPlugin implements View.OnClickListener, O
     return windowLayer;
   }
 
+  // Este es el que devuelve el infowindow completo; así que dibujamos el infowindow sin el borde
+  // Ver https://developers.google.com/maps/documentation/android-api/infowindows
+  // 
   @Override
   public View getInfoWindow(Marker marker) {
-    return null;
+    return this.getInfoContents(marker);
   }
 
   /**
